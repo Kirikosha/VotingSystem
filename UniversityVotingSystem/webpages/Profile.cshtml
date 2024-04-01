@@ -1,0 +1,23 @@
+﻿@page
+@model UniversityVotingSystem.webpages.ProfileModel
+@{
+    Layout = "Layout/_Layout";
+}
+
+<!Doctype html>
+<html>
+<head>
+    @section head{
+    <Title>University Voting System</Title>
+    <link rel="stylesheet" href="/css/MainPageStyleSheet.css" />
+    }
+</head>
+<body>
+    @section main{
+    <main>
+        <h1>Profile</h1>
+        <p>Username: @Model._user.UserName </p>
+    </main>
+    }
+</body>
+</html>
