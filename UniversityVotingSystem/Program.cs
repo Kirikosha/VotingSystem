@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System.Text;
@@ -9,8 +10,9 @@ using UniversityVotingSystem.Repository;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddRazorPages().AddRazorPagesOptions(options => 
-options.RootDirectory = "/webpages");
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+options.RootDirectory = "/webpages"
+).AddRazorPagesOptions(options => options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()));
 
 var connectionString = builder.Configuration.GetConnectionString("default");
 builder.Services.AddDbContext<ApplicationDBContext>(options =>

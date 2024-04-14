@@ -42,8 +42,11 @@ function submitVoting(){
     const propositionHTMLCollection = document.getElementsByClassName("voting-propositions");
     const propositionArray = Array.from(propositionHTMLCollection);
     var propositionValues = filterPropositions(propositionArray);
-    console.log(propositionValues);
-    console.log(propositionArray);
+    var votingName = document.getElementById("votingName").value;
+    console.log(votingName);
+    var jsonString = getJson(votingName, propositionValues);
+    console.log(jsonString);
+    makePostRequest(jsonString);
 }
 
 function filterPropositions(propositionArray){
@@ -55,4 +58,35 @@ function filterPropositions(propositionArray){
         }
     }
     return values;
+}
+
+function getJson(votingName, propositionValues){
+    
+    var jsonObj = {
+        name : votingName,
+        propositions : propositionValues
+    };
+    var jsonString = JSON.stringify(jsonObj);
+    return jsonString;
+}
+
+function makePostRequest(jsonString){
+    var requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body : jsonString
+    };
+    fetch('/CreateVoting', requestOptions)
+    .then(response => response.json())
+    .then(data =>{
+        console.log('Response from server: ', data);
+    });
+}
+
+function getToken(){
+    var token = '@Html.AntiForgeryToken()';
+    token = $(token).val();
+    return token;
 }
