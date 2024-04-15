@@ -121,5 +121,27 @@ namespace UniversityVotingSystem.Repository
             _dbContext.Users.Add(user);
             return SaveChanges();
         }
+
+        public async Task<IEnumerable<User>> GetAllUsers()
+        {
+            List<User> users = await _dbContext.User.Select(a => a).ToListAsync();
+            return users;
+        }
+
+        public bool CreateVoting(Voting voting)
+        {
+            _dbContext.Voting.Add(voting);
+            return SaveChanges();
+        }
+
+        public async Task<bool> isPresent(string votingName)
+        {
+            Voting? checkedVoting = await _dbContext.Voting.Where(a => a.voting_name.Equals(votingName)).FirstOrDefaultAsync();
+            if (checkedVoting is null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

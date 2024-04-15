@@ -27,9 +27,11 @@ namespace UniversityVotingSystem.Repository
         Task<IEnumerable<Proposition>> GetAllPropositionsById(int voting_id);
         bool DeleteVoting(Voting voting);
         bool UpdateVoting(Voting voting);
+        bool CreateVoting(Voting voting);
+        Task<bool> isPresent(string votingName);
 
         //User dbset methods
-
+        Task<IEnumerable<User>> GetAllUsers();
         Task<User> GetUserById(string user_id);
         bool UpdateUser(User user);
         Task<IEnumerable<UsersVote>> GetAllUsersVote(string user_id);
