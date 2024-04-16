@@ -35,7 +35,7 @@ namespace UniversityVotingSystem.webpages
                 return RedirectToPage("/error");
             }
 
-            bool isOperationSuccessful = CreateAndInsertVoting(parsedRequest.name).Result;
+            bool isOperationSuccessful = InsertVotingAndPropositions(parsedRequest).Result;
             if (isOperationSuccessful)
             {
                 Console.WriteLine("Success");
@@ -63,16 +63,37 @@ namespace UniversityVotingSystem.webpages
             return parsedRequest;
         }
 
-        private async Task<bool> CreateAndInsertVoting(string votingName)
+        private async Task<Voting> CreateVoting(string votingName)
         {
             bool isPresent = await repository_.isPresent(votingName);
             if (isPresent)
             {
-                return false;
+                return null;
             }
             Voting voting = new Voting{voting_name = votingName};
-            bool result = repository_.CreateVoting(voting);
-            return result;
+            return voting;
         }
+
+        private Proposition[] MapPropositions(string[] propositions)
+        {
+            Proposition[] propositionsArray = new Proposition[propositions.Length];
+            for (int i = 0; i < propositions.Length; i++)
+            {
+                propositionsArray[i] = new Proposition{proposition_text = propositions[i]};
+            }
+            return propositionsArray;
+        }
+
+        private async Task<bool> InsertVotingAndPropositions(PostRq data)
+        {
+            Voting voting = await CreateVoting(data.name);
+            if (voting is null)
+            {
+                return false;
+            }
+            voting.Propositions = MapPropositions(data.propositions).ToList();
+            bool isDbRequestSuccessful = repository_.CreateVoting(voting);
+            return isDbRequestSuccessful ? true : false;
+        }    
     }
 }
