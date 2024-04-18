@@ -143,5 +143,11 @@ namespace UniversityVotingSystem.Repository
             }
             return true;
         }
+
+        public async Task<IEnumerable<Voting>> GetAllVotings()
+        {
+            IEnumerable<Voting> votings = await _dbContext.Voting.Select(a => a).ToListAsync();
+            return votings;
+        }
     }
 }

@@ -25,6 +25,7 @@ namespace UniversityVotingSystem.Repository
 
         Task<Voting> GetVotingById(int voting_id);
         Task<IEnumerable<Proposition>> GetAllPropositionsById(int voting_id);
+        Task<IEnumerable<Voting>> GetAllVotings();
         bool DeleteVoting(Voting voting);
         bool UpdateVoting(Voting voting);
         bool CreateVoting(Voting voting);

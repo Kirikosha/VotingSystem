@@ -7,13 +7,11 @@ namespace UniversityVotingSystem.ViewModels
     {
         Voting voting { get; set; }
         List<Proposition> propositions { get; set; }
-        Hashtable propositionPerValue { get; set; }
 
-        public VotingViewModel(Voting voting, List<Proposition> propositions, Hashtable propositionPerValue)
+        public VotingViewModel(Voting voting, List<Proposition> propositions)
         {
             this.voting = voting;
             this.propositions = propositions;
-            this.propositionPerValue = propositionPerValue;
         }
     }
 }

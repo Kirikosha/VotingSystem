@@ -28,13 +28,7 @@ namespace UniversityVotingSystem.webpages
                 return new BadRequestResult();
             }
 
-            Hashtable propositionPerValue = new Hashtable();
-            foreach(Proposition proposition in propositions)
-            {
-                propositionPerValue.Add(proposition, countVotes(proposition.proposition_id));
-            }
-
-            votingVM_ = new VotingViewModel(voting, propositions, propositionPerValue);
+            votingVM_ = new VotingViewModel(voting, propositions);
             return new PageResult();
         }
 

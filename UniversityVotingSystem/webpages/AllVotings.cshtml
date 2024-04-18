@@ -1,0 +1,33 @@
+@page
+@using static UniversityVotingSystem.webpages.AllVotingsModel
+@using UniversityVotingSystem.Models;
+@model UniversityVotingSystem.webpages.AllVotingsModel
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All votings</title>
+</head>
+<body>
+    <ol>
+        @{
+            foreach (ProposotionsPerVotingObject propPerVot in @Model.propPerVotingObjectList)
+            {
+    
+                <li>@propPerVot.GetVoting().voting_name</li>
+                <ul>
+                    @{
+                        foreach (Proposition proposition in @propPerVot.GetPropositions())
+                        {
+                            <li>@proposition.proposition_text</li>
+                        }
+                    }
+                </ul>
+            }
+        }
+    </ol>
+</body>
+</html>
