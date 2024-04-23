@@ -33,11 +33,13 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromHours(2);
     options.Cookie.HttpOnly = true;
 });
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
 });
+
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
@@ -47,6 +49,7 @@ else
 {
     app.UseDeveloperExceptionPage();
 }
+
 app.UseRouting();
 app.UseStaticFiles();
 app.MapRazorPages();
@@ -54,6 +57,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("/error", () => "sorry, an error occured");
+
+
+
 //using (var scope = app.Services.CreateScope())
 //{
 //    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();

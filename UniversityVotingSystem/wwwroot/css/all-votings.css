@@ -1,0 +1,18 @@
+html *
+{
+    font-family: Arial !important;
+    margin:0px;
+}
+
+.custom-container-header
+{
+    margin:auto;
+    justify-content: center;
+}
+
+.header .custom-link a:hover
+{
+    transition: none;
+    color: black;
+    text-decoration: none;
+}

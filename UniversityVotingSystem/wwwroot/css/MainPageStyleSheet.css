@@ -1,12 +1,13 @@
-﻿html *{
+﻿html *
+{
     font-family: Arial !important;
     margin:0px;
 }
 
 
 
-.div-center{
-    
+.div-center
+{
     justify-content:center;
     margin:auto;
     width:50%;
@@ -14,21 +15,32 @@
     text-align:center;
 }
 
-    .div-center p {
-        text-align:center;
-    }
+.div-center p
+{
+    text-align:center;
+}
 
-.div-center .input-form-part p{
+.div-center .input-form-part p
+{
     padding-bottom:0px;
     margin-bottom:0px;
 }
-.div-center .input-form-part input{
+
+.div-center .input-form-part input
+{
     position:relative;
     display:inline-block;
 }
 
-#email-error, #password-error, #password2-error, #first_name-error, #last_name-error, #phone_number-error {
+#email-error, #password-error, #password2-error, #first_name-error, #last_name-error, #phone_number-error 
+{
     color: red;
     font-size: 10px;
     display: inline-block;
+}
+
+.main-info
+{
+    margin-left:30px;
+    margin-top:30px;
 }

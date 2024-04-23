@@ -1,33 +1,49 @@
-@page
+@page "/All-Votings"
 @using static UniversityVotingSystem.webpages.AllVotingsModel
 @using UniversityVotingSystem.Models;
 @model UniversityVotingSystem.webpages.AllVotingsModel
-
+@{
+    Layout = "Layout/_Layout";
+}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @section head
+    {
     <title>All votings</title>
+    <link rel="stylesheet" href="/css/all-votings.css"/>
+    }
 </head>
 <body>
-    <ol>
-        @{
-            foreach (ProposotionsPerVotingObject propPerVot in @Model.propPerVotingObjectList)
-            {
-    
-                <li>@propPerVot.GetVoting().voting_name</li>
-                <ul>
+    @section main
+    {
+        <div class="custom-container">
+            <div class="custom-container-header">
+                <h2>Current votings are located below</h2>
+            </div>
+            <div class="custom-container-votings">
+                <ol>
                     @{
-                        foreach (Proposition proposition in @propPerVot.GetPropositions())
+                        foreach (ProposotionsPerVotingObject propPerVot in @Model.propPerVotingObjectList)
                         {
-                            <li>@proposition.proposition_text</li>
+                            <li>@propPerVot.GetVoting().voting_name</li>
+                            <ul>
+                                @{
+                                    foreach (Proposition proposition in @propPerVot.GetPropositions())
+                                    {
+                                        <li>@proposition.proposition_text</li>
+                                    }
+                                }
+                            </ul>
                         }
                     }
-                </ul>
-            }
-        }
-    </ol>
+                </ol>
+            </div>
+        </div>
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css"/>
+    }
 </body>
 </html>

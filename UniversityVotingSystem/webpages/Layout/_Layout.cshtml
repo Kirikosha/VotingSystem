@@ -13,22 +13,29 @@
 
         <header>
         <div class="header">
-            <a href="#default" class="logo">University Voting System</a>
+            <a href="/MainPage" class="logo custom-link">University Voting System</a>
             <div class="header-right">
-                <a class="active" href="MainPage">Home</a>
-                <a href="#contact">Contact</a>
-                @if (!User.Identity.IsAuthenticated)
+                <a class="active custom-link" href="MainPage">Home</a>
+                <a href="/Contact" class="custom-link">Contact</a>
+                @if (User == null || User.Identity == null)
                 {
-                    <a href="Login">Log in</a>
-                    <a href="Registration">Register</a>
+                    throw new ArgumentNullException(nameof(User));
                 }
-                else{
-                    <a href="Profile">My profile</a>
+                else
+                {
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a class="custom-link" href="Login">Log in</a>
+                        <a class="custom-link" href="Registration">Register</a>
+                    }
+                    else{
+                        <a class="custom-link" href="Profile">My profile</a>
+                    }
                 }
 
             </div>
         </div>
         </header>
-    @RenderSection("main", true);
+    @RenderSection("main", true)
 </body>
 </html>
