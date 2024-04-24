@@ -3,31 +3,55 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System.Text;
+using UniversityVotingSystem;
 using UniversityVotingSystem.DataBase;
 using UniversityVotingSystem.Models;
 using UniversityVotingSystem.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Logging
+builder.Services.AddLogging();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
+//Exception handling
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+//Razor pages
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 options.RootDirectory = "/webpages"
 ).AddRazorPagesOptions(options => options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()));
 
+//Database
 var connectionString = builder.Configuration.GetConnectionString("default");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new ArgumentNullException("The connection string has not been yet initialized");
+}
+
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseMySQL(connectionString);
 });
 
+builder.Services.AddScoped<IDataBaseRepository, DataBaseRepository>();
+
+//Authentication
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
+string googleConfigurationId = builder.Configuration["GoogleAuth:clientId"] ?? "nothingId";
+string googleConfigurationSecret = builder.Configuration["GoogleAuth:clientSecret"] ?? "noSecret";
+
+//Check for google configuration id and secret to be found
+if (!googleConfigurationId.Equals("nothingId") && !googleConfigurationSecret.Equals("noSecret"))
+{
 builder.Services.AddAuthentication()
     .AddGoogle(googleOptions =>
     {
-        googleOptions.ClientId = builder.Configuration["GoogleAuth:clientId"];
-        googleOptions.ClientSecret = builder.Configuration["GoogleAuth:clientSecret"];
+        googleOptions.ClientId = googleConfigurationId;
+        googleOptions.ClientSecret = googleConfigurationSecret;
     });
-builder.Services.AddScoped<IDataBaseRepository, DataBaseRepository>();
+}
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(2);
@@ -49,7 +73,7 @@ else
 {
     app.UseDeveloperExceptionPage();
 }
-
+app.UseExceptionHandler(_ => {});
 app.UseRouting();
 app.UseStaticFiles();
 app.MapRazorPages();

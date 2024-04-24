@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Principal;
 using System.Web;
 
 namespace UniversityVotingSystem.webpages
@@ -10,11 +11,18 @@ namespace UniversityVotingSystem.webpages
     {
         public IActionResult OnGet()
         {
-            bool userstatus = HttpContext.User.Identity.IsAuthenticated;
-            if(!userstatus)
+            IIdentity? identity = HttpContext.User.Identity;
+            if (identity is null)
+            {
+                throw new ArgumentNullException(nameof(identity), "Identity was null, problem with authentication");
+            }
+
+            bool userstatus = identity.IsAuthenticated;
+            if (!userstatus)
             {
                 return new RedirectToPageResult("Login");
             }
+
             return new PageResult();
         }
     }

@@ -6,12 +6,12 @@ namespace UniversityVotingSystem.Models
     public class UsersVote
     {
         [Key, Required]
-        public int vote_id {  get; set; }
+        public required int vote_id {  get; set; }
         [ForeignKey("Proposition"), Required]
-        public int proposition_id { get; set; }
+        public required int proposition_id { get; set; }
         [ForeignKey("User"), Required]
-        public string user_id { get; set; }
-        public User User { get; set; }
-        public Proposition Proposition { get; set; }
+        public required string user_id { get; set; }
+        public required User User { get; set; }
+        public required Proposition Proposition { get; set; }
     }
 }

@@ -8,10 +8,10 @@ namespace UniversityVotingSystem.Models
         [Key, Required]
         public int proposition_id {  get; set; }
         [Required]
-        public string proposition_text { get; set; }
+        public required string proposition_text { get; set; }
         [ForeignKey("Voting"),Required]
         public int voting_id { get; set; }
-        public List<UsersVote> UsersVotes { get; set; }
-        public Voting Voting { get; set; }
+        public List<UsersVote> UsersVotes { get; set; } = new List<UsersVote>();
+        public Voting? Voting { get; set; }
     }
 }

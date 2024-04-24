@@ -19,23 +19,24 @@ namespace UniversityVotingSystem.webpages
         }
         public sealed class PostRq
         {
-            public string name {get; set;}
-            public string[] propositions {get; set;}
+            public string name {get; set;} = new string("");
+            public string[]? propositions {get; set;}
         }
         public void OnGet()
         {
 
         }
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
             PostRq parsedRequest = ParseJsonString().Result;
-
-            if (string.IsNullOrWhiteSpace(parsedRequest.name) || string.IsNullOrWhiteSpace(parsedRequest.propositions[0]))
+            string? name = parsedRequest.name;
+            string[]? propositions = parsedRequest.propositions;
+            if (string.IsNullOrWhiteSpace(parsedRequest.name) || propositions is null)
             {
-                return RedirectToPage("/error");
+                throw new ArgumentNullException(nameof(parsedRequest), "Either PostRq.name || PostRq.propositions is null");
             }
 
-            bool isOperationSuccessful = InsertVotingAndPropositions(parsedRequest).Result;
+            bool isOperationSuccessful = InsertVotingAndPropositions(parsedRequest);
             if (isOperationSuccessful)
             {
                 Console.WriteLine("Success");
@@ -58,20 +59,27 @@ namespace UniversityVotingSystem.webpages
             using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 jsonString = await reader.ReadToEndAsync();
-                parsedRequest = JsonConvert.DeserializeObject<PostRq>(jsonString);
+                if (string.IsNullOrEmpty(jsonString))
+                {
+                    throw new ArgumentNullException(nameof(jsonString), "JSON can't be parsed");
+                }
+
+                parsedRequest = JsonConvert.DeserializeObject<PostRq>(jsonString) ?? new PostRq();
             }
+
             return parsedRequest;
         }
 
-        private async Task<Voting> CreateVoting(string votingName)
+        private async Task<(Voting, bool)> CreateVoting(string votingName)
         {
             bool isPresent = await repository_.isPresent(votingName);
             if (isPresent)
             {
-                return null;
+                return (new Voting(){voting_name = ""}, true) ;
             }
+
             Voting voting = new Voting{voting_name = votingName};
-            return voting;
+            return (voting, false);
         }
 
         private Proposition[] MapPropositions(string[] propositions)
@@ -81,19 +89,26 @@ namespace UniversityVotingSystem.webpages
             {
                 propositionsArray[i] = new Proposition{proposition_text = propositions[i]};
             }
+
             return propositionsArray;
         }
 
-        private async Task<bool> InsertVotingAndPropositions(PostRq data)
+        private bool InsertVotingAndPropositions(PostRq data)
         {
-            Voting voting = await CreateVoting(data.name);
-            if (voting is null)
+            (Voting, bool) response = CreateVoting(data.name).Result;
+            if (response.Item2 is true)
             {
                 return false;
+            }
+
+            Voting voting = response.Item1;
+            if (data.propositions is null)
+            {
+                throw new ArgumentNullException(nameof(data.propositions), "Propositions were null on the stage of insertion them into db");
             }
             voting.Propositions = MapPropositions(data.propositions).ToList();
             bool isDbRequestSuccessful = repository_.CreateVoting(voting);
             return isDbRequestSuccessful ? true : false;
-        }    
+        }
     }
 }

@@ -59,25 +59,46 @@ namespace UniversityVotingSystem.Repository
 
         public async Task<Proposition> GetPropositionById(int PropositionId)
         {
-            Proposition proposition = await _dbContext.Proposition.FirstOrDefaultAsync(a => a.proposition_id == PropositionId);
+            Proposition? proposition = await _dbContext.Proposition.FirstOrDefaultAsync(a => a.proposition_id == PropositionId);
+            if (proposition is null)
+            {
+                throw new ArgumentNullException(nameof(proposition), "Current propositon was not found, that can be a problem in a db. File: DataBaseRepository.cs");
+            }
+
             return proposition;
         }
 
         public async Task<User> GetUserById(string user_id)
         {
-            User user = await _dbContext.User.FirstOrDefaultAsync(a => a.user_id == user_id);
+            User? user = await _dbContext.User.FirstOrDefaultAsync(a => a.user_id == user_id);
+            if (user is null)
+            {
+                throw new ArgumentNullException(nameof(user), "The user was not found. File: DataBaseRepository.cs");
+            }
+
             return user;
         }
 
         public async Task<User> GetUserByUserVoteId(int vote_id)
         {
             UsersVote userVote= await GetUsersVoteByVoteId(vote_id);
-            User user = await _dbContext.User.FirstOrDefaultAsync(a => a.user_id == userVote.user_id);
+            User? user = await _dbContext.User.FirstOrDefaultAsync(a => a.user_id == userVote.user_id);
+            if (user is null)
+            {
+                throw new ArgumentNullException(nameof(user), "User was null in GetUserByUserVoteId method in file DataBaseRepository.cs");
+            }
+
             return user;
         }
         private async Task<UsersVote> GetUsersVoteByVoteId(int vote_id)
         {
-            return await _dbContext.UsersVote.FirstOrDefaultAsync(a => a.vote_id == vote_id);
+            UsersVote? vote = await _dbContext.UsersVote.FirstOrDefaultAsync(a => a.vote_id == vote_id);
+            if(vote is null)
+            {
+                throw new ArgumentNullException(nameof(vote), "Vote was null in GetUsersVoteByVoteId method in file DataBaseRepository.cs");
+            }
+
+            return vote;
         }
         public async Task<IEnumerable<UsersVote>> GetVotesForPropositionByPropositionId(int PropositionId)
         {
@@ -87,7 +108,13 @@ namespace UniversityVotingSystem.Repository
 
         public async Task<Voting> GetVotingById(int voting_id)
         {
-            return await _dbContext.Voting.FirstOrDefaultAsync(a => a.voting_id == voting_id);
+            Voting? voting = await _dbContext.Voting.FirstOrDefaultAsync(a => a.voting_id == voting_id);
+            if (voting is null)
+            {
+                throw new ArgumentNullException(nameof(voting), "Voting was null in GetVotingById method in file DataBaseRepository.cs");
+            }
+
+            return voting;
         }
 
         public bool SaveChanges()

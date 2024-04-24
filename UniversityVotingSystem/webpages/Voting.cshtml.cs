@@ -14,6 +14,7 @@ namespace UniversityVotingSystem.webpages
         public VotingModel(IDataBaseRepository repository)
         {
             _repository = repository;
+            votingVM_ = new VotingViewModel(null, null);
         }
         public async Task<IActionResult> OnGet(int id)
         {

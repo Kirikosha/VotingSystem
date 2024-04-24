@@ -6,15 +6,15 @@ namespace UniversityVotingSystem.Models
     public class User : IdentityUser
     {
         [Key, Required]
-        public string user_id { get; set; }
+        public string? user_id { get; set; }
         [Required]
-        public string first_name { get; set; }
+        public string? first_name { get; set; }
         [Required]
-        public string second_name { get; set; }
+        public string? second_name { get; set; }
         [Required]
-        public string phone_number { get; set; }
+        public string? phone_number { get; set; }
         [Required]
-        public string role { get; set; }
-        public List<UsersVote> Votes { get; set; }
+        public string role { get; set; } = "SimpleUser";
+        public List<UsersVote> Votes { get; set; } = new List<UsersVote>();
     }
 }

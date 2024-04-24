@@ -5,10 +5,10 @@ namespace UniversityVotingSystem.ViewModels
 {
     public class VotingViewModel
     {
-        Voting voting { get; set; }
-        List<Proposition> propositions { get; set; }
+        Voting? voting { get; set; }
+        List<Proposition>? propositions { get; set; }
 
-        public VotingViewModel(Voting voting, List<Proposition> propositions)
+        public VotingViewModel(Voting? voting, List<Proposition>? propositions)
         {
             this.voting = voting;
             this.propositions = propositions;

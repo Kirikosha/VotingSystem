@@ -33,13 +33,14 @@ namespace UniversityVotingSystem.webpages
         public AllVotingsModel (IDataBaseRepository repository)
         {
             _repository = repository;
+            propPerVotingObjectList = new List<ProposotionsPerVotingObject>();
         }
-        public async Task<IActionResult> OnGet()
+
+        public IActionResult OnGet()
         {
             List<Voting> votings =_repository.GetAllVotings().Result.ToList();
             Console.WriteLine(votings.Count());
             propPerVotingObjectList = new List<ProposotionsPerVotingObject>(votings.Count());
-            
             int index = 0;
             foreach (Voting voting in votings)
             {
