@@ -1,4 +1,14 @@
-﻿@page
+﻿@page "{Id}"
 @model UniversityVotingSystem.webpages.VotingModel
 @{
+}
+
+Hi
+<p>@Model.votingVM_.getVoting().voting_name</p>
+@{
+    var array = @Model.votingVM_.GetHashTableReference().GetNodes();
+    foreach(var node in array)
+    {
+        <p>Proposition: @node.getKey() has around @node.getValue() votes</p>
+    }
 }

@@ -19,7 +19,7 @@ namespace UniversityVotingSystem.Repository
         bool ClearVoteFromProposition(int vote_id);
         Task<User> GetUserByUserVoteId(int vote_id);
         bool ChangeUserVote(UsersVote userVote);
-
+        int CountVotesByPropositionId(int propositionId);
 
         //Voting dbset methods
 

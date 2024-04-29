@@ -5,7 +5,7 @@
 @{
     Layout = "Layout/_Layout";
 }
-
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,25 +22,17 @@
     {
         <div class="custom-container">
             <div class="custom-container-header">
-                <h2>Current votings are located below</h2>
+                <h2 class="custom-h2-centred">Current votings are located below</h2>
             </div>
             <div class="custom-container-votings">
-                <ol>
+                <div class="list-group">
                     @{
                         foreach (ProposotionsPerVotingObject propPerVot in @Model.propPerVotingObjectList)
                         {
-                            <li>@propPerVot.GetVoting().voting_name</li>
-                            <ul>
-                                @{
-                                    foreach (Proposition proposition in @propPerVot.GetPropositions())
-                                    {
-                                        <li>@proposition.proposition_text</li>
-                                    }
-                                }
-                            </ul>
+                            <a asp-page="./Voting" asp-route-id="@propPerVot.GetVoting().voting_id" class="list-group-item list-group-item-action">@propPerVot.GetVoting().voting_name</a>
                         }
                     }
-                </ol>
+                </div>
             </div>
         </div>
     <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css"/>

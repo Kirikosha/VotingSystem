@@ -16,7 +16,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 //Exception handling
-builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+//builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 //Razor pages
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 options.RootDirectory = "/webpages"
@@ -64,7 +64,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
 });
 
-var app = builder.Build();
+var app = builder.Build();/*
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error");
@@ -73,7 +73,7 @@ else
 {
     app.UseDeveloperExceptionPage();
 }
-app.UseExceptionHandler(_ => {});
+app.UseExceptionHandler(_ => {});*/
 app.UseRouting();
 app.UseStaticFiles();
 app.MapRazorPages();

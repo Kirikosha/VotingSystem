@@ -176,5 +176,11 @@ namespace UniversityVotingSystem.Repository
             IEnumerable<Voting> votings = await _dbContext.Voting.Select(a => a).ToListAsync();
             return votings;
         }
+
+        public int CountVotesByPropositionId(int propositionId)
+        {
+            int count = _dbContext.UsersVote.Count(a => a.proposition_id == propositionId);
+            return count;
+        }
     }
 }

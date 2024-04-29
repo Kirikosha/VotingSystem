@@ -16,20 +16,28 @@ namespace UniversityVotingSystem.webpages
             _repository = repository;
             votingVM_ = new VotingViewModel(null, null);
         }
+
         public async Task<IActionResult> OnGet(int id)
         {
             Voting voting = await _repository.GetVotingById(id);
-            if(voting == null)
+            if (voting == null)
             {
                 return new BadRequestResult();
             }
 
             List<Proposition> propositions =(List<Proposition>) await _repository.GetAllPropositionsById(id);
-            if(!checkPropositions(propositions)) {
+            if (!checkPropositions(propositions))
+            {
                 return new BadRequestResult();
             }
 
             votingVM_ = new VotingViewModel(voting, propositions);
+            foreach (Proposition proposition in propositions)
+            {
+                int count = _repository.CountVotesByPropositionId(proposition.proposition_id);
+                votingVM_.GetHashTableReference().updateRow(proposition.proposition_id, count);
+            }
+
             return new PageResult();
         }
 
