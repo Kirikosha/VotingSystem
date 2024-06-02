@@ -18,9 +18,14 @@ builder.Logging.AddConsole();
 //Exception handling
 //builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 //Razor pages
-builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+builder.Services.AddRazorPages()/*.AddRazorPagesOptions(options =>
 options.RootDirectory = "/webpages"
-).AddRazorPagesOptions(options => options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()));
+)*/.AddRazorPagesOptions(options => {
+    options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+    options.Conventions.AddAreaPageRoute("UserAuthentication","/Login/LoginPage", "Login");
+    options.Conventions.AddAreaPageRoute("UserAuthentication", "/Register/Registration", "Registration");
+    options.Conventions.AddAreaPageRoute("VotingManipulations", "/CreateVoting/CreateVoting", "CreateVoting");
+    options.Conventions.AddPageRoute("/Profile/Profile", "/Profile");});
 
 //Database
 var connectionString = builder.Configuration.GetConnectionString("default");
@@ -35,7 +40,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 });
 
 builder.Services.AddScoped<IDataBaseRepository, DataBaseRepository>();
-
+builder.Services.AddScoped<IPropositionVotingRepository, PropositionVotingRepository>();
 //Authentication
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
 string googleConfigurationId = builder.Configuration["GoogleAuth:clientId"] ?? "nothingId";

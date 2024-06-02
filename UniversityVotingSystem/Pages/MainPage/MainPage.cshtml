@@ -1,0 +1,35 @@
+﻿@page "/MainPage"
+@model UniversityVotingSystem.webpages.MainPageModel
+@{
+    Layout = "Layout/_Layout";
+}
+
+<!Doctype html>
+<html>
+    <head>
+        @section head {
+        <Title>University Voting System</Title>
+        <link rel="stylesheet" href="/css/MainPageStyleSheet.css"/>
+        }
+    </head>
+    <body>
+        @section main{
+        <main>
+            <div class="main-info">
+                <div class="about-us-div">
+                    <h3> Shortly about us</h3>
+                    <p>This system was created by our university to speed up such processes as voting and etc.</p>
+                </div>
+                <div>
+                    <h3>What is this project about?</h3>
+                    <ul>
+                        <li>Firstly, this project was created as a practice for .NET asp.net core development</li>
+                        <li>For now not so many changes has happened since first lines of code. Mostly they are connected to the creation of accounts and the creation of votings + propositons</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        }
+    </body>
+</html>
+

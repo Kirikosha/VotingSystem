@@ -89,13 +89,18 @@ function getJson(votingName, propositionValues)
     return jsonString;
 }
 
+function makeGetRequest()
+{
+    fetch("/CreateVoting", {method: "GET"});
+}
 function makePostRequest(jsonString)
 {
+
     var requestOptions = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
-        },
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',},
         body : jsonString
     };
     fetch('/CreateVoting', requestOptions)

@@ -7,10 +7,10 @@ using UniversityVotingSystem.Models;
 
 namespace UniversityVotingSystem.webpages
 {
-    public class LoginModel : PageModel
+    public class LoginPageModel : PageModel
     {
         UserManager<User> _userManager;
-        public LoginModel(UserManager<User> userManager)
+        public LoginPageModel(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
@@ -44,7 +44,7 @@ namespace UniversityVotingSystem.webpages
 
                 await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, new ClaimsPrincipal(identity));
 
-                return new RedirectToPageResult("MainPage");
+                return LocalRedirect("/MainPage");
             }
             else
             {

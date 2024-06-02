@@ -20,7 +20,7 @@ namespace UniversityVotingSystem.webpages
             bool userstatus = identity.IsAuthenticated;
             if (!userstatus)
             {
-                return new RedirectToPageResult("Login");
+                return LocalRedirect("/Login");
             }
 
             return new PageResult();

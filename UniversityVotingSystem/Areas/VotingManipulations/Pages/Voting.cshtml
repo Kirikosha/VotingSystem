@@ -4,9 +4,9 @@
 }
 
 Hi
-<p>@Model.votingVM_.getVoting().voting_name</p>
+<p>@Model.VotingViewModelObj.getVoting().voting_name</p>
 @{
-    var array = @Model.votingVM_.GetHashTableReference().GetNodes();
+    var array = @Model.VotingViewModelObj.GetHashTableReference().GetNodes();
     foreach(var node in array)
     {
         <p>Proposition: @node.getKey() has around @node.getValue() votes</p>

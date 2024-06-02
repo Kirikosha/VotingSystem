@@ -1,0 +1,72 @@
+@page "/All-Votings"
+@using static UniversityVotingSystem.webpages.AllVotingsModel
+@using UniversityVotingSystem.Models;
+@model UniversityVotingSystem.webpages.AllVotingsModel
+@{
+    Layout = "Layout/_Layout";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @section head
+    {
+    <title>All votings</title>
+    <link rel="stylesheet" href="/css/all-votings.css"/>
+    }
+</head>
+<body>
+    @section main
+    {
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        function deleteWindow(votingId)
+        {
+            var question = "Do you really want to delete this voting? " + votingId;
+            var answer = window.confirm(question);
+            if(answer)
+            {
+                var jsonObj = {
+                        id : votingId
+                    };
+                var jsonString = JSON.stringify(jsonObj);
+                var requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body : jsonString
+                };
+                fetch('/All-Votings', requestOptions)
+                .then(response => response.json())
+                .then(data =>{
+                    console.log('Response from server: ', data);
+                });
+            }
+        }
+    </script>
+        <div class="custom-container">
+            <div class="custom-container-header">
+                <h2 class="custom-h2-centred">Current votings are located below</h2>
+            </div>
+            <div class="custom-container-votings">
+                <div class="list-group">
+                    @{
+                        foreach (ProposotionsPerVotingObject propPerVot in @Model.propPerVotingObjectList)
+                        {
+                            <div>
+                                <a asp-page="./Voting" asp-route-id="@propPerVot.GetVoting().voting_id" class="list-group-item list-group-item-action">@propPerVot.GetVoting().voting_name</a>
+                                <button onclick="deleteWindow('@propPerVot.GetVoting().voting_id')">Delete</button>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css"/>
+    }
+</body>
+</html>
