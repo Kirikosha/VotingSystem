@@ -91,25 +91,31 @@ function getJson(votingName, propositionValues)
 
 function makeGetRequest()
 {
-    fetch("/CreateVoting", {method: "GET"});
+    fetch("/AllVotings", {method: "GET"});
 }
-function makePostRequest(jsonString)
-{
-
+function makePostRequest(jsonString) {
     var requestOptions = {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',},
-        body : jsonString
+            'Content-Type': 'application/json',
+        },
+        body: jsonString
     };
+
     fetch('/CreateVoting', requestOptions)
-    .then(response => response.json())
-    .then(data =>{
-        console.log('Response from server: ', data);
+    .then(response => {
+        if (response.status === 200 || response.status === 201) {
+            console.log('POST request successful.');
+            window.location.href = "/All-Votings";
+        } else {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
     });
 }
-
 function validationStarter(votingName, propositionArray)
 {
     var validateVotingNameErrorMessage = validateVotingName(votingName);

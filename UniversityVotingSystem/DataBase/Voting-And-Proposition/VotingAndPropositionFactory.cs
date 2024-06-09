@@ -46,6 +46,6 @@ public class VotingAndProposotionFactory
             }
             voting.Propositions = MapPropositions(data.propositions).ToList();
             bool isDbRequestSuccessful = _repository.CreateVoting(voting);
-            return isDbRequestSuccessful ? true : false;
+            return isDbRequestSuccessful;
         }
 }

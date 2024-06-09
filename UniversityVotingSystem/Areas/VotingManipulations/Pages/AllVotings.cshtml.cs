@@ -1,11 +1,10 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using System.Collections;
+using Newtonsoft.Json.Linq;
 using System.Text;
 using UniversityVotingSystem.Models;
-using UniversityVotingSystem.Repository;
-using UniversityVotingSystem.ViewModels;
 
 namespace UniversityVotingSystem.webpages
 {
@@ -50,12 +49,29 @@ namespace UniversityVotingSystem.webpages
                 {
                     throw new ArgumentNullException(nameof(jsonString));
                 }
-                votingId = JsonConvert.DeserializeObject<int>(jsonString);
-            }
 
-            System.Console.WriteLine(votingId + " s");
-            return new JsonResult("Ok");
+                JObject jsonObject = JObject.Parse(jsonString);
+                JToken? idValue;
+                bool isGettingValueSuccessful = jsonObject.TryGetValue("id", out idValue);
+                if(idValue is null){
+                    throw new ArgumentNullException(nameof(idValue));
+                }
+
+                bool success = Int32.TryParse(idValue.ToString(), out votingId);
+                if(!success){
+                    return BadRequest();
+                }
+            }
+            if(DeleteVoting(votingId).Result){
+                return OnGet();
+            }
+            return BadRequest();
         }
 
+        private async Task<bool> DeleteVoting(int votingId){
+            Voting voting = await _propositionVotingRepository.GetVotingById(votingId);
+            bool result = _propositionVotingRepository.DeleteVoting(voting);
+            return result;
+        }
     }
 }

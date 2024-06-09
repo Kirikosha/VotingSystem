@@ -9,10 +9,11 @@ namespace UniversityVotingSystem.webpages
     public class ProfileModel : PageModel
     {
         UserManager<User> _userManager;
-
+        SignInManager<User> _signInManager;
         public User _user {  get; set; }
-        public ProfileModel(UserManager<User> userManager)
+        public ProfileModel(UserManager<User> userManager, SignInManager<User> signInManager)
         {
+            _signInManager = signInManager;
             _userManager = userManager;
             _user = new User();
         }
@@ -26,7 +27,7 @@ namespace UniversityVotingSystem.webpages
 
             if (!identity.IsAuthenticated)
             {
-                return new RedirectToPageResult("Login");
+                return RedirectToPage("Login", new {area = "UserAuthentication"});
             }
 
             if(identity.Name is not null)
@@ -46,6 +47,11 @@ namespace UniversityVotingSystem.webpages
             }
 
             return user;
+        }
+
+        public async Task<IActionResult> OnGetSignOut(){
+            await _signInManager.SignOutAsync();
+            return LocalRedirect("/MainPage");
         }
     }
 }

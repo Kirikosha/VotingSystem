@@ -73,9 +73,13 @@ public class PropositionVotingRepository : IPropositionVotingRepository
         return voting;
     }
 
-    public Task<bool> isPresent(string votingName)
+    public async Task<bool> isPresent(string votingName)
     {
-        throw new NotImplementedException();
+        Voting? voting = await _dbContext.Voting.FirstOrDefaultAsync(a => a.voting_name == votingName);
+        if(voting is null){
+            return false;
+        }
+        return true;
     }
 
     public bool UpdateVoteProposition(Proposition proposition)

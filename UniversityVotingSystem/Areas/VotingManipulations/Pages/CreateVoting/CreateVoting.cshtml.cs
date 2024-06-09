@@ -37,13 +37,11 @@ namespace UniversityVotingSystem.webpages
             bool isOperationSuccessful = factory.InsertVotingAndPropositions(parsedRequest);
             if (isOperationSuccessful)
             {
-                Console.WriteLine("Success");
-                return new PageResult();
+                return new StatusCodeResult(200);
             }
             else
             {
-                Console.WriteLine("Bad request");
-                return BadRequest();
+                return new StatusCodeResult(500);
             }
         }
     }
