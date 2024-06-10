@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityVotingSystem.DataBase;
 
@@ -10,9 +11,11 @@ using UniversityVotingSystem.DataBase;
 namespace UniversityVotingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240610201954_FixedVotingPropositionsDelete")]
+    partial class FixedVotingPropositionsDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,23 +156,20 @@ namespace UniversityVotingSystem.Migrations
 
             modelBuilder.Entity("UniversityVotingSystem.Models.Proposition", b =>
                 {
-                    b.Property<int>("PropositionId")
+                    b.Property<int>("proposition_id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("proposition_id");
+                        .HasColumnType("int");
 
-                    b.Property<string>("PropositionText")
+                    b.Property<string>("proposition_text")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("proposition_text");
+                        .HasColumnType("longtext");
 
-                    b.Property<int>("VotingId")
-                        .HasColumnType("int")
-                        .HasColumnName("voting_id");
+                    b.Property<int>("voting_id")
+                        .HasColumnType("int");
 
-                    b.HasKey("PropositionId");
+                    b.HasKey("proposition_id");
 
-                    b.HasIndex("VotingId");
+                    b.HasIndex("voting_id");
 
                     b.ToTable("Proposition");
                 });
@@ -192,11 +192,6 @@ namespace UniversityVotingSystem.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("first_name");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -221,29 +216,34 @@ namespace UniversityVotingSystem.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("role");
-
-                    b.Property<string>("SecondName")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("second_name");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("longtext")
-                        .HasColumnName("user_id");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<string>("first_name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("phone_number")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("role")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("second_name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("user_id")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -259,58 +259,37 @@ namespace UniversityVotingSystem.Migrations
 
             modelBuilder.Entity("UniversityVotingSystem.Models.UsersVote", b =>
                 {
-                    b.Property<int>("VoteId")
+                    b.Property<int>("vote_id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("vote_id");
+                        .HasColumnType("int");
 
-                    b.Property<int>("PropositionId")
-                        .HasColumnType("int")
-                        .HasColumnName("proposition_id");
+                    b.Property<int>("proposition_id")
+                        .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("user_id")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("user_id");
+                        .HasColumnType("varchar(255)");
 
-                    b.HasKey("VoteId");
+                    b.HasKey("vote_id");
 
-                    b.HasIndex("PropositionId");
+                    b.HasIndex("proposition_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("user_id");
 
                     b.ToTable("UsersVote");
                 });
 
             modelBuilder.Entity("UniversityVotingSystem.Models.Voting", b =>
                 {
-                    b.Property<int>("VotingId")
+                    b.Property<int>("voting_id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("voting_id");
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("created_at");
-
-                    b.Property<DateTime>("EndsAt")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("ends_at");
-
-                    b.Property<DateTime>("StartsAt")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("starts_at");
-
-                    b.Property<int>("State")
-                        .HasColumnType("int")
-                        .HasColumnName("state");
-
-                    b.Property<string>("VotingName")
+                    b.Property<string>("voting_name")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("voting_name");
+                        .HasColumnType("longtext");
 
-                    b.HasKey("VotingId");
+                    b.HasKey("voting_id");
 
                     b.ToTable("Voting");
                 });
@@ -370,7 +349,7 @@ namespace UniversityVotingSystem.Migrations
                 {
                     b.HasOne("UniversityVotingSystem.Models.Voting", "Voting")
                         .WithMany("Propositions")
-                        .HasForeignKey("VotingId")
+                        .HasForeignKey("voting_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -381,13 +360,13 @@ namespace UniversityVotingSystem.Migrations
                 {
                     b.HasOne("UniversityVotingSystem.Models.Proposition", "Proposition")
                         .WithMany("UsersVotes")
-                        .HasForeignKey("PropositionId")
+                        .HasForeignKey("proposition_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UniversityVotingSystem.Models.User", "User")
                         .WithMany("Votes")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 

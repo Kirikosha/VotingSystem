@@ -26,7 +26,7 @@ namespace UniversityVotingSystem.webpages
             int index = 0;
             foreach (Voting voting in votings)
             {
-                List<Proposition> propositions = _propositionVotingRepository.GetAllPropositionsById(voting.voting_id).Result.ToList();
+                List<Proposition> propositions = _propositionVotingRepository.GetAllPropositionsById(voting.VotingId).Result.ToList();
                 ProposotionsPerVotingObject propPerVotingObj = new ProposotionsPerVotingObject(voting, propositions);
 
 

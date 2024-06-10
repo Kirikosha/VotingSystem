@@ -1,5 +1,6 @@
 using System.Text;
 using Newtonsoft.Json;
+using UniversityVotingSystem.Models;
 
 public class JsonParserVoting : IJsonParser
 {
@@ -30,6 +31,9 @@ public class JsonParserVoting : IJsonParser
 
 public sealed class ParsedJsonResult
 {
-    public string name {get; set;} = new string("");
-    public string[]? propositions {get; set;}
+    public string? VotingName {get; set;}
+    public int State {get; set;}
+    public DateTime StartsAt {get; set;}
+    public DateTime EndsAt {get; set;}
+    public string[]? Propositions {get; set;}
 }

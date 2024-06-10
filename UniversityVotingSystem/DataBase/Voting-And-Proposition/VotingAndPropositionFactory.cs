@@ -8,15 +8,14 @@ public class VotingAndProposotionFactory
         _repository = repository;
     }
 
-        private async Task<(Voting, bool)> CreateVoting(string votingName)
+        private async Task<(Voting?, bool)> CreateVoting(string votingName, int state, DateTime startsAt, DateTime endsAt)
         {
             bool isPresent = await _repository.isPresent(votingName);
             if (isPresent)
             {
-                return (new Voting(){voting_name = ""}, true) ;
+                return (null, true) ;
             }
-
-            Voting voting = new Voting{voting_name = votingName};
+            Voting voting = new Voting{VotingName = votingName, State = state, CreatedAt = DateTime.Now, StartsAt = startsAt, EndsAt = endsAt};
             return (voting, false);
         }
 
@@ -25,7 +24,7 @@ public class VotingAndProposotionFactory
             Proposition[] propositionsArray = new Proposition[propositions.Length];
             for (int i = 0; i < propositions.Length; i++)
             {
-                propositionsArray[i] = new Proposition{proposition_text = propositions[i]};
+                propositionsArray[i] = new Proposition{PropositionText = propositions[i]};
             }
 
             return propositionsArray;
@@ -33,18 +32,27 @@ public class VotingAndProposotionFactory
 
         public bool InsertVotingAndPropositions(ParsedJsonResult data)
         {
-            (Voting, bool) response = CreateVoting(data.name).Result;
+            if(data.VotingName is null){
+                throw new ArgumentNullException(nameof(data.VotingName));
+            }
+
+            (Voting?, bool) response = CreateVoting(data.VotingName, data.State, data.StartsAt, data.EndsAt).Result;
             if (response.Item2 is true)
             {
                 return false;
             }
 
-            Voting voting = response.Item1;
-            if (data.propositions is null)
-            {
-                throw new ArgumentNullException(nameof(data.propositions), "Propositions were null on the stage of insertion them into db");
+            Voting? voting = response.Item1;
+            if (voting is null){
+                throw new ArgumentNullException(nameof(voting));
             }
-            voting.Propositions = MapPropositions(data.propositions).ToList();
+
+            if (data.Propositions is null)
+            {
+                throw new ArgumentNullException(nameof(data.Propositions), "Propositions were null on the stage of insertion them into db");
+            }
+
+            voting.Propositions = MapPropositions(data.Propositions).ToList();
             bool isDbRequestSuccessful = _repository.CreateVoting(voting);
             return isDbRequestSuccessful;
         }

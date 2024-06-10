@@ -1,12 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniversityVotingSystem.Models;
-using UniversityVotingSystem.Repository;
 
 namespace UniversityVotingSystem.webpages
 {
@@ -37,7 +31,7 @@ namespace UniversityVotingSystem.webpages
             bool isOperationSuccessful = factory.InsertVotingAndPropositions(parsedRequest);
             if (isOperationSuccessful)
             {
-                return new StatusCodeResult(200);
+                return new StatusCodeResult(201);
             }
             else
             {

@@ -41,9 +41,13 @@
                     body : jsonString
                 };
                 fetch('/All-Votings', requestOptions)
-                .then(response => response.json())
-                .then(data =>{
-                    console.log('Response from server: ', data);
+                .then(response => {
+                    if(response.status == 200){
+                        location.reload();
+                    }
+                    else{
+                        alert("Can't delete due to some internal error");
+                    }
                 });
             }
         }
@@ -59,8 +63,8 @@
                         foreach (ProposotionsPerVotingObject propPerVot in @Model.propPerVotingObjectList)
                         {
                             <div>
-                                <a asp-page="./Voting" asp-route-id="@propPerVot.GetVoting().voting_id" class="list-group-item list-group-item-action">@propPerVot.GetVoting().voting_name</a>
-                                <button onclick="deleteWindow('@propPerVot.GetVoting().voting_id')">Delete</button>
+                                <a asp-page="./Voting" asp-route-id="@propPerVot.GetVoting().VotingId" class="list-group-item list-group-item-action">@propPerVot.GetVoting().VotingName</a>
+                                <button onclick="deleteWindow('@propPerVot.GetVoting().VotingId')">Delete</button>
                             </div>
                         }
                     }

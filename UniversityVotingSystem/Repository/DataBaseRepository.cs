@@ -45,21 +45,21 @@ namespace UniversityVotingSystem.Repository
             return SaveChanges();
         }
 
-        public async Task<IEnumerable<Proposition>> GetAllPropositionsById(int voting_id)
+        public async Task<IEnumerable<Proposition>> GetAllPropositionsById(int votingId)
         {
-            List<Proposition> proposition = await _dbContext.Proposition.Where(a=>a.voting_id == voting_id).ToListAsync();
+            List<Proposition> proposition = await _dbContext.Proposition.Where(a=>a.VotingId == votingId).ToListAsync();
             return proposition;
         }
 
-        public async Task<IEnumerable<UsersVote>> GetAllUsersVote(string user_id)
+        public async Task<IEnumerable<UsersVote>> GetAllUsersVote(string userId)
         {
-            List<UsersVote> usersVote = await _dbContext.UsersVote.Where(a => a.user_id == user_id).ToListAsync();
+            List<UsersVote> usersVote = await _dbContext.UsersVote.Where(a => a.UserId == userId).ToListAsync();
             return usersVote;
         }
 
-        public async Task<Proposition> GetPropositionById(int PropositionId)
+        public async Task<Proposition> GetPropositionById(int propositionId)
         {
-            Proposition? proposition = await _dbContext.Proposition.FirstOrDefaultAsync(a => a.proposition_id == PropositionId);
+            Proposition? proposition = await _dbContext.Proposition.FirstOrDefaultAsync(a => a.PropositionId == propositionId);
             if (proposition is null)
             {
                 throw new ArgumentNullException(nameof(proposition), "Current propositon was not found, that can be a problem in a db. File: DataBaseRepository.cs");
@@ -68,9 +68,9 @@ namespace UniversityVotingSystem.Repository
             return proposition;
         }
 
-        public async Task<User> GetUserById(string user_id)
+        public async Task<User> GetUserById(string userId)
         {
-            User? user = await _dbContext.User.FirstOrDefaultAsync(a => a.user_id == user_id);
+            User? user = await _dbContext.User.FirstOrDefaultAsync(a => a.UserId == userId);
             if (user is null)
             {
                 throw new ArgumentNullException(nameof(user), "The user was not found. File: DataBaseRepository.cs");
@@ -79,10 +79,10 @@ namespace UniversityVotingSystem.Repository
             return user;
         }
 
-        public async Task<User> GetUserByUserVoteId(int vote_id)
+        public async Task<User> GetUserByUserVoteId(int voteId)
         {
-            UsersVote userVote= await GetUsersVoteByVoteId(vote_id);
-            User? user = await _dbContext.User.FirstOrDefaultAsync(a => a.user_id == userVote.user_id);
+            UsersVote userVote= await GetUsersVoteByVoteId(voteId);
+            User? user = await _dbContext.User.FirstOrDefaultAsync(a => a.UserId == userVote.UserId);
             if (user is null)
             {
                 throw new ArgumentNullException(nameof(user), "User was null in GetUserByUserVoteId method in file DataBaseRepository.cs");
@@ -90,9 +90,9 @@ namespace UniversityVotingSystem.Repository
 
             return user;
         }
-        private async Task<UsersVote> GetUsersVoteByVoteId(int vote_id)
+        private async Task<UsersVote> GetUsersVoteByVoteId(int voteId)
         {
-            UsersVote? vote = await _dbContext.UsersVote.FirstOrDefaultAsync(a => a.vote_id == vote_id);
+            UsersVote? vote = await _dbContext.UsersVote.FirstOrDefaultAsync(a => a.VoteId == voteId);
             if(vote is null)
             {
                 throw new ArgumentNullException(nameof(vote), "Vote was null in GetUsersVoteByVoteId method in file DataBaseRepository.cs");
@@ -100,15 +100,15 @@ namespace UniversityVotingSystem.Repository
 
             return vote;
         }
-        public async Task<IEnumerable<UsersVote>> GetVotesForPropositionByPropositionId(int PropositionId)
+        public async Task<IEnumerable<UsersVote>> GetVotesForPropositionByPropositionId(int propositionId)
         {
-            List<UsersVote> usersVoteForProposition = await _dbContext.UsersVote.Where(a=>a.proposition_id == PropositionId).ToListAsync();
+            List<UsersVote> usersVoteForProposition = await _dbContext.UsersVote.Where(a=>a.PropositionId == propositionId).ToListAsync();
             return usersVoteForProposition;
         }
 
-        public async Task<Voting> GetVotingById(int voting_id)
+        public async Task<Voting> GetVotingById(int votingId)
         {
-            Voting? voting = await _dbContext.Voting.FirstOrDefaultAsync(a => a.voting_id == voting_id);
+            Voting? voting = await _dbContext.Voting.FirstOrDefaultAsync(a => a.VotingId == votingId);
             if (voting is null)
             {
                 throw new ArgumentNullException(nameof(voting), "Voting was null in GetVotingById method in file DataBaseRepository.cs");
@@ -163,7 +163,7 @@ namespace UniversityVotingSystem.Repository
 
         public async Task<bool> isPresent(string votingName)
         {
-            Voting? checkedVoting = await _dbContext.Voting.Where(a => a.voting_name.Equals(votingName)).FirstOrDefaultAsync();
+            Voting? checkedVoting = await _dbContext.Voting.Where(a => a.VotingName.Equals(votingName)).FirstOrDefaultAsync();
             if (checkedVoting is null)
             {
                 return false;
@@ -179,7 +179,7 @@ namespace UniversityVotingSystem.Repository
 
         public int CountVotesByPropositionId(int propositionId)
         {
-            int count = _dbContext.UsersVote.Count(a => a.proposition_id == propositionId);
+            int count = _dbContext.UsersVote.Count(a => a.PropositionId == propositionId);
             return count;
         }
     }

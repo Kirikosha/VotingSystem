@@ -33,9 +33,9 @@ public class PropositionVotingRepository : IPropositionVotingRepository
         return SaveChanges();
     }
 
-    public async Task<IEnumerable<Proposition>> GetAllPropositionsById(int voting_id)
+    public async Task<IEnumerable<Proposition>> GetAllPropositionsById(int votingId)
     {
-        List<Proposition> proposition = await _dbContext.Proposition.Where(a=>a.voting_id == voting_id).ToListAsync();
+        List<Proposition> proposition = await _dbContext.Proposition.Where(a=>a.VotingId == votingId).ToListAsync();
         return proposition;
     }
 
@@ -45,9 +45,9 @@ public class PropositionVotingRepository : IPropositionVotingRepository
         return votings;
     }
 
-    public async Task<Proposition> GetPropositionById(int PropositionId)
+    public async Task<Proposition> GetPropositionById(int propositionId)
     {
-        Proposition? proposition = await _dbContext.Proposition.FirstOrDefaultAsync(a => a.proposition_id == PropositionId);
+        Proposition? proposition = await _dbContext.Proposition.FirstOrDefaultAsync(a => a.PropositionId == propositionId);
         if (proposition is null)
         {
             throw new ArgumentNullException(nameof(proposition), "Current propositon was not found, that can be a problem in a db. File: DataBaseRepository.cs");
@@ -56,15 +56,15 @@ public class PropositionVotingRepository : IPropositionVotingRepository
         return proposition;
     }
 
-    public async Task<IEnumerable<UsersVote>> GetVotesForPropositionByPropositionId(int PropositionId)
+    public async Task<IEnumerable<UsersVote>> GetVotesForPropositionByPropositionId(int propositionId)
     {
-        List<UsersVote> usersVoteForProposition = await _dbContext.UsersVote.Where(a=>a.proposition_id == PropositionId).ToListAsync();
+        List<UsersVote> usersVoteForProposition = await _dbContext.UsersVote.Where(a=>a.PropositionId == propositionId).ToListAsync();
         return usersVoteForProposition;
     }
 
-    public async Task<Voting> GetVotingById(int voting_id)
+    public async Task<Voting> GetVotingById(int votingId)
     {
-        Voting? voting = await _dbContext.Voting.FirstOrDefaultAsync(a => a.voting_id == voting_id);
+        Voting? voting = await _dbContext.Voting.FirstOrDefaultAsync(a => a.VotingId == votingId);
         if (voting is null)
         {
             throw new ArgumentNullException(nameof(voting), "Voting was null in GetVotingById method in file DataBaseRepository.cs");
@@ -75,7 +75,7 @@ public class PropositionVotingRepository : IPropositionVotingRepository
 
     public async Task<bool> isPresent(string votingName)
     {
-        Voting? voting = await _dbContext.Voting.FirstOrDefaultAsync(a => a.voting_name == votingName);
+        Voting? voting = await _dbContext.Voting.FirstOrDefaultAsync(a => a.VotingName == votingName);
         if(voting is null){
             return false;
         }

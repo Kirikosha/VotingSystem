@@ -34,8 +34,8 @@ namespace UniversityVotingSystem.webpages
             VotingViewModelObj = new VotingViewModel(voting, propositions);
             foreach (Proposition proposition in propositions)
             {
-                int count = _repository.CountVotesByPropositionId(proposition.proposition_id);
-                VotingViewModelObj.GetHashTableReference().updateRow(proposition.proposition_id, count);
+                int count = _repository.CountVotesByPropositionId(proposition.PropositionId);
+                VotingViewModelObj.GetHashTableReference().updateRow(proposition.PropositionId, count);
             }
 
             return new PageResult();

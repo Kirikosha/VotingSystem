@@ -57,13 +57,13 @@ namespace UniversityVotingSystem.webpages
                 }
                 User user = new User()
                 {
-                    first_name = Request.Form["first_name"].ToString(), //required
-                    second_name = Request.Form["last_name"].ToString(), //required
-                    phone_number = Request.Form["phone_number"].ToString(), //NOT - required
+                    FirstName = Request.Form["first_name"].ToString(), //required
+                    SecondName = Request.Form["last_name"].ToString(), //required
+                    PhoneNumber = Request.Form["phone_number"].ToString(), //NOT - required
                     Email = Request.Form["email"].ToString(), //required
                     UserName = Request.Form["first_name"].ToString() + "_" + Request.Form["last_name"].ToString(), //required
                     EmailConfirmed = true,
-                    role = "SimpleUser"
+                    Role = "SimpleUser"
                 };
 
                 return (user, "OK");

@@ -84,7 +84,10 @@ app.UseStaticFiles();
 app.MapRazorPages();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapGet("/", context => {
+        context.Response.Redirect("/MainPage");
+        return Task.CompletedTask;
+    });
 app.MapGet("/error", () => "sorry, an error occured");
 
 

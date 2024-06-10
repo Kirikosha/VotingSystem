@@ -5,12 +5,12 @@ namespace UniversityVotingSystem.Models
 {
     public class Proposition
     {
-        [Key, Required]
-        public int proposition_id {  get; set; }
-        [Required]
-        public required string proposition_text { get; set; }
-        [ForeignKey("Voting"),Required]
-        public int voting_id { get; set; }
+        [Key, Required, Column("proposition_id")]
+        public int PropositionId {  get; set; }
+        [Required, Column("proposition_text")]
+        public required string PropositionText { get; set; }
+        [ForeignKey("Voting"),Required, Column("voting_id")]
+        public int VotingId { get; set; }
         public List<UsersVote> UsersVotes { get; set; } = new List<UsersVote>();
         public Voting? Voting { get; set; }
     }
