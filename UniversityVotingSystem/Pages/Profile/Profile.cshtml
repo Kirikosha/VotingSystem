@@ -1,0 +1,27 @@
+﻿@page "Profile"
+@model UniversityVotingSystem.webpages.ProfileModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+
+<!Doctype html>
+<html>
+<head>
+    @section head{
+    <Title>University Voting System</Title>
+    <link rel="stylesheet" href="/css/MainPageStyleSheet.css" />
+    }
+</head>
+<body>
+    @section main{
+    <main>
+        <h1>Profile</h1>
+        <p>Username: @Model._user.UserName </p>
+    </main>
+    <div>
+        <a class="custom-link" asp-page="Profile" asp-page-handler="SignOut">Log out</a>
+    </div>
+    }
+</body>
+</html>

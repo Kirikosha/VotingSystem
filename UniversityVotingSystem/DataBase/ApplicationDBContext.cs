@@ -19,7 +19,7 @@ namespace UniversityVotingSystem.DataBase
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Votes)
                 .WithOne(e => e.User)
-                .HasForeignKey(e => e.user_id)
+                .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.ClientCascade);
 
@@ -27,12 +27,12 @@ namespace UniversityVotingSystem.DataBase
                 .HasMany(a => a.UsersVotes)
                 .WithOne(a => a.Proposition)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Voting>()
                 .HasMany(a => a.Propositions)
                 .WithOne(a => a.Voting)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

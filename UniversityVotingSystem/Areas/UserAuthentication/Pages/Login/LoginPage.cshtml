@@ -1,0 +1,48 @@
+﻿@page
+@model UniversityVotingSystem.webpages.LoginPageModel
+@{
+    Layout = "_Layout";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!Doctype html>
+<html>
+<head>
+    @section head{
+    <Title>University Voting System</Title>
+    <link rel="stylesheet" href="/css/MainPageStyleSheet.css" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="958281363933-u5a1e0leo3ig2kitdt3nlb2e5gqflop9.apps.googleusercontent.com" />}
+</head>
+<body>
+    @section main{
+
+
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        }
+
+    </script>
+
+    <form method="post" asp-page-handler="OnPostAsync">
+        <label>Login</label>
+        <input type="text"  placeholder="Login" name="email" />
+        <label>Password</label>
+        <input type="text" placeholder="Password" name="password"/>
+        <button type="submit">Log in</button>
+    </form>
+    <div>
+        <h4>You may sign in using the following services</h4>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <br/>
+        <p>You may register here <a href="Registration">link</a></p>
+    </div>
+    }
+</body>
+</html>
+
