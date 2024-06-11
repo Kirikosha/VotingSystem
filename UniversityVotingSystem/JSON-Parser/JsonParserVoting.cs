@@ -31,9 +31,14 @@ public class JsonParserVoting : IJsonParser
 
 public sealed class ParsedJsonResult
 {
+    [JsonProperty("name")]
     public string? VotingName {get; set;}
+    [JsonProperty("state")]
     public int State {get; set;}
+    [JsonProperty("starts_at")]
     public DateTime StartsAt {get; set;}
+    [JsonProperty("ends_at")]
     public DateTime EndsAt {get; set;}
+    [JsonProperty("propositions")]
     public string[]? Propositions {get; set;}
 }

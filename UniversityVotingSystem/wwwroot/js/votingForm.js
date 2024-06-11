@@ -56,11 +56,14 @@ function submitVoting()
     const propositionArray = Array.from(propositionHTMLCollection);
     var propositionValues = filterPropositions(propositionArray);
     var votingName = document.getElementById("votingName").value;
+    var stateValue = document.getElementsByName("state").value;
+    var startsAt = document.getElementById("startsAt").value;
+    var endsAt = document.getElementById("endsAt").value;
     console.log(votingName);
-    var isValid = validationStarter(votingName, propositionValues);
+    var isValid = validationStarter(votingName, propositionValues, startsAt, endsAt);
     if (isValid)
     {
-        var jsonString = getJson(votingName, propositionValues);
+        var jsonString = getJson(votingName, propositionValues, stateValue, startsAt, endsAt);
         console.log(jsonString);
         makePostRequest(jsonString);
     }
@@ -78,12 +81,15 @@ function filterPropositions(propositionArray)
     return values;
 }
 
-function getJson(votingName, propositionValues)
+function getJson(votingName, propositionValues, stateValue, startsAt, endsAt)
 {
-    
+
     var jsonObj = {
         name : votingName,
-        propositions : propositionValues
+        propositions : propositionValues,
+        state : stateValue,
+        starts_at : startsAt,
+        ends_at : endsAt
     };
     var jsonString = JSON.stringify(jsonObj);
     return jsonString;
@@ -116,12 +122,13 @@ function makePostRequest(jsonString) {
         console.error('There was a problem with the fetch operation:', error);
     });
 }
-function validationStarter(votingName, propositionArray)
+function validationStarter(votingName, propositionArray, startingDate, endingDate)
 {
     var validateVotingNameErrorMessage = validateVotingName(votingName);
     var validatePropositionErrorMessage = validateProposition(propositionArray);
-
-    var errorMessage = validateVotingNameErrorMessage + validatePropositionErrorMessage;
+    var validateStartingDateErrorMessage = validateStartingDate(startingDate);
+    var validateEndingDateErrorMessage = validateEndingDate(startingDate, endingDate);
+    var errorMessage = validateVotingNameErrorMessage + validatePropositionErrorMessage + validateStartingDateErrorMessage + validateEndingDateErrorMessage;
     console.log(errorMessage);
     if(errorMessage != "")
     {
@@ -205,4 +212,22 @@ function createVotingNameErrorMessage(sizeError, capitalLetterError)
         errorMessage += "\nFirst letter of the voting name should be uppercase";
     }
     return errorMessage;
+}
+
+function validateStartingDate(startingDate){
+    var inputDate = new Date(startingDate);
+    var currentDate = new Date()
+    if(inputDate < currentDate){
+        return "\nStarting date should not be less than the current on";
+    }
+    return "";
+}
+
+function validateEndingDate(startingDate, endingDate){
+    var startingDateObj = new Date(startingDate);
+    var endingDateObj = new Date(endingDate)
+    if(startingDateObj > endingDateObj){
+        return "\nEnding date should be after the starting date, not equal or before";
+    }
+    return "";
 }
