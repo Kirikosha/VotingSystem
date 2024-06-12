@@ -22,9 +22,13 @@ namespace UniversityVotingSystem.Repository
             throw new NotImplementedException();
         }
 
-        public bool ClearVoteFromProposition(int vote_id)
+        public bool ClearVoteFromProposition(int voteId)
         {
-            throw new NotImplementedException();
+            UsersVote? vote = _dbContext.UsersVote.FirstOrDefault(a => a.VoteId == voteId);
+            if(vote is not null){
+                _dbContext.UsersVote.Remove(vote);
+            }
+            return SaveChanges();
         }
 
         public bool DeleteProposition(Proposition proposition)
@@ -187,6 +191,21 @@ namespace UniversityVotingSystem.Repository
         {
             _dbContext.UsersVote.Add(usersVote);
             return SaveChanges();
+        }
+
+        public async Task<IEnumerable<Proposition>> GetPropositionsByVotingId(int VotingId)
+        {
+            IEnumerable<Proposition> propositions = await _dbContext.Proposition.Where(a => a.VotingId == VotingId).ToListAsync();
+            return propositions;
+        }
+
+        public async Task<int> CheckIfUserVotedForProposition(Proposition proposition, string userId)
+        {
+            UsersVote? vote = await _dbContext.UsersVote.Where(a => a.PropositionId == proposition.PropositionId && a.UserId == userId).FirstOrDefaultAsync();
+            if(vote is null){
+                return -1;
+            }
+            return vote.VoteId;
         }
     }
 }

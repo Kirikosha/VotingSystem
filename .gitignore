@@ -365,3 +365,7 @@ FodyWeavers.xsd
 #config
 appsettings.json
 /UniversityVotingSystem/appsettings.json
+UniversityVotingSystem/.dockerignore
+UniversityVotingSystem/Dockerfile
+UniversityVotingSystem/docker-compose.yml
+UniversityVotingSystem/docker-compose.debug.yml

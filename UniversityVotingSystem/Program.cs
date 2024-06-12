@@ -27,6 +27,7 @@ options.RootDirectory = "/webpages"
 
 //Database
 var connectionString = builder.Configuration.GetConnectionString("Default");
+connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 if (string.IsNullOrEmpty(connectionString))
 {
     throw new ArgumentNullException("The connection string has not been yet initialized");

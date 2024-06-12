@@ -8,6 +8,7 @@ namespace UniversityVotingSystem.Repository
         bool SaveChanges();
 
         //Proposition dbset methods
+        Task<IEnumerable<Proposition>> GetPropositionsByVotingId(int VotingId);
         Task<Proposition> GetPropositionById(int PropositionId);
         Task<IEnumerable<UsersVote>> GetVotesForPropositionByPropositionId(int PropositionId);
         Task<bool> AddVoteProposition(Proposition proposition, int voting_id);
@@ -16,6 +17,7 @@ namespace UniversityVotingSystem.Repository
         bool DeleteProposition(Proposition proposition);
 
         //UsersVote dbset methods
+        Task<int> CheckIfUserVotedForProposition(Proposition proposition, string userId);
         bool ClearVoteFromProposition(int vote_id);
         Task<User> GetUserByUserVoteId(int vote_id);
         bool ChangeUserVote(UsersVote userVote);

@@ -4,7 +4,6 @@
 @using UniversityVotingSystem.Models
 @{
 }
-<script src="~/js/signalr.js"></script>
 Hi
 <p>@Model.VotingViewModelObj.getVoting().VotingName</p>
 @{
@@ -15,26 +14,32 @@ Hi
             <div class="vote" style="display: inline-block;">
                 <p id="vote-info-@node.getValue().PropositionObj.PropositionId">Proposition: id: name: @node.getValue().PropositionObj.PropositionText votes</p>
                 <p id="@node.getValue().PropositionObj.PropositionId">@node.GetValueCount()</p>
-                <button onclick="vote('@Model.UserId', '@node.getValue().PropositionObj.PropositionId')">Vote</button>
+                <button onclick="vote('@Model.UserId', '@node.getValue().PropositionObj.PropositionId', '@Model.VotingViewModelObj.getVoting().VotingId')">Vote</button>
             </div>
         }
     }
 }
+<script src="~/js/signalr.js"></script>
 <script>
     var connection = new signalR.HubConnectionBuilder().withUrl("/vote").build();
     connection.start();
-    function vote(userId, propositionId){
-        connection.invoke("Vote", userId, propositionId).catch(function(err){
+    function vote(userId, propositionId, votingId){
+        connection.invoke("Vote", userId, propositionId, votingId).catch(function(err){
             return console.error(err.toString());
         });
 
         event.preventDefault();
     }
 
-    connection.on("UpdatedVote", function(isGood, propositionId){
+    connection.on("UpdatedVote", function(isGood, propositionId, lastId){
+        console.log(propositionId);
+        console.log(lastId);
         var proposition = document.getElementById(propositionId);
+        var lastProposition = document.getElementById(lastId);
         var updatedCount = Number(proposition.innerText);
+        var lastUpdatedCount = Number(lastProposition.innerText) - 1;
         updatedCount+=1;
         proposition.innerText = updatedCount;
-    })
+        lastProposition.innerText = lastUpdatedCount;
+    });
 </script>
