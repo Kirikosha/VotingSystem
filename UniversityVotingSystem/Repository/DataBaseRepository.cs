@@ -182,5 +182,11 @@ namespace UniversityVotingSystem.Repository
             int count = _dbContext.UsersVote.Count(a => a.PropositionId == propositionId);
             return count;
         }
+
+        public bool AddUserVote(UsersVote usersVote)
+        {
+            _dbContext.UsersVote.Add(usersVote);
+            return SaveChanges();
+        }
     }
 }

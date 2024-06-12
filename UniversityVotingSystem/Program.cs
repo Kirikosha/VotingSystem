@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
-using System.Text;
 using UniversityVotingSystem;
 using UniversityVotingSystem.DataBase;
 using UniversityVotingSystem.Models;
@@ -28,7 +26,7 @@ options.RootDirectory = "/webpages"
     options.Conventions.AddPageRoute("/Profile/Profile", "/Profile");});
 
 //Database
-var connectionString = builder.Configuration.GetConnectionString("default");
+var connectionString = builder.Configuration.GetConnectionString("Default");
 if (string.IsNullOrEmpty(connectionString))
 {
     throw new ArgumentNullException("The connection string has not been yet initialized");
@@ -68,7 +66,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
 });
-
+builder.Services.AddSignalR();
 var app = builder.Build();/*
 if (!app.Environment.IsDevelopment())
 {
@@ -84,6 +82,7 @@ app.UseStaticFiles();
 app.MapRazorPages();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHub<VoteHub>("/vote");
 app.MapGet("/", context => {
         context.Response.Redirect("/MainPage");
         return Task.CompletedTask;

@@ -20,6 +20,13 @@ namespace UniversityVotingSystem.ViewModels
             return voting;
         }
 
+        public int getPropositionId(Proposition? proposition){
+            if(proposition is not null){
+                return proposition.PropositionId;
+            }
+            return -1;
+        }
+
         public Hashtable GetHashTableReference()
         {
             return hashtable;

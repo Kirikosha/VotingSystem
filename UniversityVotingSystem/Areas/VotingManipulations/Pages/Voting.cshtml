@@ -1,14 +1,40 @@
 ﻿@page "{Id}"
 @model UniversityVotingSystem.webpages.VotingModel
+@using Microsoft.AspNetCore.Identity
+@using UniversityVotingSystem.Models
 @{
 }
-
+<script src="~/js/signalr.js"></script>
 Hi
 <p>@Model.VotingViewModelObj.getVoting().VotingName</p>
 @{
     var array = @Model.VotingViewModelObj.GetHashTableReference().GetNodes();
     foreach(var node in array)
     {
-        <p>Proposition: @node.getKey() has around @node.getValue() votes</p>
+        if(node.getValue() is not null && node.getValue().PropositionObj is not null){
+            <div class="vote" style="display: inline-block;">
+                <p id="vote-info-@node.getValue().PropositionObj.PropositionId">Proposition: id: name: @node.getValue().PropositionObj.PropositionText votes</p>
+                <p id="@node.getValue().PropositionObj.PropositionId">@node.GetValueCount()</p>
+                <button onclick="vote('@Model.UserId', '@node.getValue().PropositionObj.PropositionId')">Vote</button>
+            </div>
+        }
     }
 }
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/vote").build();
+    connection.start();
+    function vote(userId, propositionId){
+        connection.invoke("Vote", userId, propositionId).catch(function(err){
+            return console.error(err.toString());
+        });
+
+        event.preventDefault();
+    }
+
+    connection.on("UpdatedVote", function(isGood, propositionId){
+        var proposition = document.getElementById(propositionId);
+        var updatedCount = Number(proposition.innerText);
+        updatedCount+=1;
+        proposition.innerText = updatedCount;
+    })
+</script>

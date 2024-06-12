@@ -1,67 +1,67 @@
 namespace UniversityVotingSystem;
 public class Hashtable
 {
-    Node[] nodes;
-    private int tableSize;
-    private int allNodesValuesSum; //Num of all elements
-    private int filledNodes;
+    private Node[] _nodes;
+    private int _tableSize;
+    private int _allNodesValuesSum; //Num of all elements
+    private int _filledNodes;
     public Hashtable()
     {
-        nodes = new Node[10];
-        tableSize = 10;
-        allNodesValuesSum = 0;
-        filledNodes = 0;
+        _nodes = new Node[10];
+        _tableSize = 10;
+        _allNodesValuesSum = 0;
+        _filledNodes = 0;
     }
 
     private int hashFunction(int key)
     {
-        int hashValue = key % tableSize;
+        int hashValue = key % _tableSize;
         return hashValue;
     }
 
-    public void updateRow(int key, int value = 1)
+    public void updateRow(int key, NodeValue nodeValue)
     {
         int hashValue = hashFunction(key);
 
-        Node node = new Node(key, value);
-        if(nodes[hashValue] is not null)
+        Node node = new Node(key, nodeValue);
+        if(_nodes[hashValue] is not null)
         {
-            if(nodes[hashValue].getKey() == key) nodes[hashValue].setValue(value);
+            if(_nodes[hashValue].getKey() == key) _nodes[hashValue].setValue(1);
             else
             {
-                bool isNewNodeCreated = nodes[hashValue].createNode(node);
-                filledNodes = isNewNodeCreated ? filledNodes + 1 : filledNodes;
+                bool isNewNodeCreated = _nodes[hashValue].createNode(node);
+                _filledNodes = isNewNodeCreated ? _filledNodes + 1 : _filledNodes;
             }
         }
         else
         {
-            nodes[hashValue] = node;
-            filledNodes++;
+            _nodes[hashValue] = node;
+            _filledNodes++;
         }
-        allNodesValuesSum += 1;
+        _allNodesValuesSum += 1;
     }
 
     public Node[]? GetNodes()
     {
-        if(filledNodes == 0)
+        if(_filledNodes == 0)
         {
             return null;
         }
 
-        Node[] filledNodesArray = new Node[filledNodes];
+        Node[] filledNodesArray = new Node[_filledNodes];
 
         int i = 0; //index for main array of nodes
         int j = 0; //index for filledNodesArray
 
-        while(i < tableSize && j < filledNodes)
+        while(i < _tableSize && j < _filledNodes)
         {
-            if(nodes[i] is null)
+            if(_nodes[i] is null)
             {
                 i++;
                 continue;
             }
 
-            Node? currentNode = nodes[i];
+            Node? currentNode = _nodes[i];
             while(currentNode is not null)
             {
                 filledNodesArray[j] = new Node(currentNode.getKey(), currentNode.getValue());
@@ -79,10 +79,10 @@ public class Hashtable
 public class Node
 {
     private readonly int key;
-    private int value;
+    private NodeValue value;
     private Node? nextNode;
 
-    public Node (int key, int value)
+    public Node (int key, NodeValue value)
     {
         this.key = key;
         this.value = value;
@@ -93,18 +93,28 @@ public class Node
         return key;
     }
 
-    public int getValue()
+    public NodeValue? getValue()
     {
-        return value;
+        if(value is not null){
+            return value;
+        }
+        return null;
+    }
+
+    public int GetValueCount(){
+        if(value is not null){
+            return value.Count;
+        }
+        return -1;
     }
 
     public void setValue(int value)
     {
-        this.value += value;
+        this.value.Count += value;
     }
     public void decrementValue()
     {
-        value--;
+        value.Count--;
     }
 
     public Node? getNextNode()
@@ -114,6 +124,10 @@ public class Node
         {
             return nextNode;
         }
+    }
+
+    public NodeValue? ChangeValue(NodeValue? value){
+        return value;
     }
 
     public bool createNode(Node node)
@@ -129,7 +143,7 @@ public class Node
         {
             if (currentNode.getKey() == node.getKey())
             {
-                currentNode.setValue(node.getValue());
+                currentNode.ChangeValue(node.getValue());
                 return false;
             }
 

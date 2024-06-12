@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections;
 using UniversityVotingSystem.Models;
 using UniversityVotingSystem.Repository;
 using UniversityVotingSystem.ViewModels;
@@ -10,10 +10,13 @@ namespace UniversityVotingSystem.webpages
     public class VotingModel : PageModel
     {
         public VotingViewModel VotingViewModelObj { get; set; }
+        public string? UserId{get; set;}
+        private UserManager<User> _userManager;
         IDataBaseRepository _repository;
-        public VotingModel(IDataBaseRepository repository)
+        public VotingModel(IDataBaseRepository repository, UserManager<User> userManager)
         {
             this._repository = repository;
+            _userManager = userManager;
             VotingViewModelObj = new VotingViewModel(null, null);
         }
 
@@ -35,9 +38,15 @@ namespace UniversityVotingSystem.webpages
             foreach (Proposition proposition in propositions)
             {
                 int count = _repository.CountVotesByPropositionId(proposition.PropositionId);
-                VotingViewModelObj.GetHashTableReference().updateRow(proposition.PropositionId, count);
+                VotingViewModelObj.GetHashTableReference().updateRow(proposition.PropositionId, new NodeValue{PropositionObj = proposition, Count = count});
             }
 
+            string? Username = HttpContext.User.Identity.Name;
+            if(Username is null){
+                throw new ArgumentNullException("Username is null", nameof(Username));
+            }
+            User currentUser = FindUser(Username).Result;
+            UserId = currentUser.Id;
             return new PageResult();
         }
 
@@ -65,6 +74,17 @@ namespace UniversityVotingSystem.webpages
         {
             if(vote == null) return false;
             return true;
+        }
+
+        private async Task<User> FindUser(string username)
+        {
+            User? user =  await _userManager.FindByNameAsync(username);
+            if(user is null)
+            {
+                throw new ArgumentNullException(nameof(user), "User was not found");
+            }
+
+            return user;
         }
     }
 }
